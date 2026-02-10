@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noimageindex">
+    <title>Ambiance - Portfolio ETEVE SARAH</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --primary-light: #7df9ff;
+            --primary-glow: #00a8cc;
+            --accent: #00ffff;
+            --bg: #0a0a1a;
+            --bg-dark: #050510;
+            --text: #e0f7ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            font-family: Inter, sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0px, rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 3px);
+            opacity: 0.3;
+        }
+
+       /* NAVBAR */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(12px);
+            background: rgba(10, 10, 30, 0.7);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            z-index: 20;
+        }
+
+        .navbar nav a {
+            margin: 0 15px;
+            font-size: 15px;
+            color: var(--text);
+            text-decoration: none;
+            transition: .3s;
+            position: relative;
+        }
+
+        .navbar nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+            transition: width 0.3s;
+        }
+
+        .navbar nav a:hover::after {
+            width: 100%;
+        }
+
+        .navbar nav a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+        .back-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: Orbitron, sans-serif;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: var(--bg);
+            box-shadow: 0 0 30px var(--primary), inset 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        .page-header { padding: 140px 80px 60px; position: relative; z-index: 1; }
+
+        .page-title {
+            font-size: 60px;
+            font-family: Orbitron;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5));
+            margin-bottom: 15px;
+        }
+
+        .page-subtitle { font-size: 18px; color: rgba(224, 247, 255, 0.7); max-width: 600px; }
+
+        .gallery { padding: 40px 80px 100px; position: relative; z-index: 1; }
+
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--bg-dark);
+            cursor: pointer;
+            aspect-ratio: 4/3;
+            border: 2px solid rgba(0, 212, 255, 0.4);
+            transition: all 0.4s ease;
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent 0deg, var(--primary-light) 30deg, var(--accent) 60deg, transparent 90deg, transparent 180deg, var(--primary-light) 210deg, var(--accent) 240deg, transparent 270deg);
+            z-index: 0;
+            opacity: 0;
+            animation: none;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        @keyframes rotateBorder { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            top: 2px; left: 2px; right: 2px; bottom: 2px;
+            background: var(--bg-dark);
+            border-radius: 14px;
+            z-index: 1;
+        }
+
+        .gallery-item-content {
+            position: absolute;
+            top: 2px; left: 2px; right: 2px; bottom: 2px;
+            border-radius: 14px;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: .4s; }
+
+        .gallery-item:hover { transform: scale(1.02); border-color: transparent; }
+
+        .gallery-item:hover::before {
+            opacity: 1;
+            animation: rotateBorder 1.5s linear infinite;
+            background: conic-gradient(from 0deg, transparent 0deg, #ffffff 20deg, var(--primary-light) 40deg, var(--accent) 60deg, transparent 80deg, transparent 180deg, #ffffff 200deg, var(--primary-light) 220deg, var(--accent) 240deg, transparent 260deg);
+        }
+
+        .gallery-item:hover img { transform: scale(1.1); }
+
+        .gallery-item-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(5, 5, 16, 0.9));
+            z-index: 3;
+            transition: 0.4s;
+        }
+
+        .gallery-item-overlay span {
+            color: var(--primary-light);
+            font-family: Orbitron;
+            font-size: 14px;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Badge série de photos */
+        .series-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 212, 255, 0.9);
+            color: var(--bg-dark);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-family: Orbitron;
+            font-size: 11px;
+            font-weight: 700;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(5, 5, 16, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            position: relative;
+            animation: modalFadeIn 0.4s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -50px; right: 0;
+            width: 50px; height: 50px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover { background: var(--primary); color: var(--bg); box-shadow: 0 0 30px var(--primary); }
+
+        .modal-image-container {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--bg-dark);
+            border: 2px solid rgba(0, 212, 255, 0.4);
+        }
+
+        .modal-image-wrapper { position: relative; z-index: 2; padding: 3px; }
+
+        .modal-image { width: 100%; height: auto; border-radius: 14px; display: block; transition: opacity 0.3s ease; }
+
+        /* Carrousel navigation */
+        .carousel-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 10;
+            background: rgba(5, 5, 16, 0.8);
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .carousel-nav.hidden { display: none; }
+
+        .carousel-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .carousel-btn:hover {
+            background: var(--primary);
+            color: var(--bg);
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        .carousel-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(0, 212, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .carousel-dot.active {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .carousel-dot:hover {
+            background: var(--primary-light);
+        }
+
+        .carousel-counter {
+            font-family: Orbitron;
+            font-size: 12px;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        .modal-info { display: flex; flex-direction: column; justify-content: center; }
+
+        .modal-title {
+            font-family: Orbitron;
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px var(--primary);
+        }
+
+        .modal-description {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .modal-description::before {
+            content: 'description & DÉMARCHE';
+            position: absolute;
+            top: -12px; left: 20px;
+            background: var(--bg);
+            padding: 0 10px;
+            font-family: Orbitron;
+            font-size: 11px;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .modal-description p { font-size: 15px; line-height: 1.7; color: rgba(224, 247, 255, 0.9); }
+
+        .camera-settings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+
+        .setting-box {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-dark);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .setting-box::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent 0deg, var(--primary-light) 60deg, transparent 120deg, transparent 180deg, var(--primary-light) 240deg, transparent 300deg);
+            animation: rotateBorder 5s linear infinite;
+            z-index: 0;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+        .modal-overlay:not(.active) .setting-box::before { animation-play-state: paused; }
+
+        .setting-box::after {
+            content: '';
+            position: absolute;
+            top: 2px; left: 2px; right: 2px; bottom: 2px;
+            background: var(--bg-dark);
+            border-radius: 10px;
+            z-index: 1;
+        }
+
+        .setting-box-content { position: relative; z-index: 2; }
+        .setting-label { font-family: Orbitron; font-size: 10px; letter-spacing: 2px; color: var(--primary); margin-bottom: 8px; text-transform: uppercase; }
+        .setting-value { font-family: Orbitron; font-size: 24px; font-weight: 700; color: var(--primary-light); text-shadow: 0 0 15px var(--primary); }
+        .setting-icon { font-size: 20px; margin-bottom: 8px; }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            font-size: 14px;
+            color: var(--primary);
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+            background: rgba(0, 212, 255, 0.02);
+            position: relative;
+            z-index: 1;
+        }
+
+        @media(max-width: 1100px) {
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .modal { grid-template-columns: 1fr; max-height: 90vh; overflow-y: auto; }
+        }
+
+        @media(max-width: 768px) {
+            .page-header { padding: 120px 30px 40px; }
+            .page-title { font-size: 36px; }
+            .gallery { padding: 20px 30px 60px; }
+            .gallery-grid { grid-template-columns: 1fr; gap: 20px; }
+            .navbar { padding: 15px 20px; }
+            .navbar nav { display: none; }
+            .modal-overlay { padding: 20px; }
+            .modal-close { top: -40px; width: 40px; height: 40px; font-size: 18px; }
+            .camera-settings { grid-template-columns: 1fr; }
+            .carousel-nav { padding: 8px 15px; gap: 10px; }
+            .carousel-btn { width: 35px; height: 35px; font-size: 16px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="scanlines"></div>
+
+<header class="navbar">
+    
+    <nav>
+        <a href="index.html#hero">Accueil</a>
+        <a href="index.html#photo">Photo</a>
+        <a href="index.html#graphisme">Graphisme</a>
+        <a href="video.html">Vidéo</a>
+        <a href="index.html#contact">Contact</a>
+    </nav>
+    <a href="index.html" class="back-btn">← Retour</a>
+</header>
+
+<div class="page-header">
+    <h1 class="page-title">AMBIANCE</h1>
+    </div>
+
+<section class="gallery">
+    <div class="gallery-grid">
+        <!-- Photo 1 - Liminal Place (série de 3 photos) -->
+        <div class="gallery-item" onclick="openModal(0)">
+            <div class="series-badge">📷 2 photos</div>
+            <div class="gallery-item-content"><img src="assets/liminal_1.jpg" alt="Liminal Place"></div>
+            <div class="gallery-item-overlay"><span>Liminal Place - Série →</span></div>
+        </div>
+
+        <!-- Photo 2 -->
+        <div class="gallery-item" onclick="openModal(1)">
+            <div class="gallery-item-content"><img src="assets/ambiance_2.jpg" alt="Ambiance 2"></div>
+            <div class="gallery-item-overlay"><span>Voir les détails →</span></div>
+        </div>
+
+        <!-- Photo 3 -->
+        <div class="gallery-item" onclick="openModal(2)">
+            <div class="gallery-item-content"><img src="assets/ambiance_3.jpg" alt="Ambiance 3"></div>
+            <div class="gallery-item-overlay"><span>Voir les détails →</span></div>
+        </div>
+
+        <!-- Photo 4 -->
+        <div class="gallery-item" onclick="openModal(3)">
+            <div class="gallery-item-content"><img src="assets/ambiance_4.jpg" alt="Ambiance 4"></div>
+            <div class="gallery-item-overlay"><span>Voir les détails →</span></div>
+        </div>
+
+        <!-- Photo 5 -->
+        <div class="gallery-item" onclick="openModal(4)">
+            <div class="gallery-item-content"><img src="assets/ambiance_5.jpg" alt="Ambiance 5"></div>
+            <div class="gallery-item-overlay"><span>Voir les détails →</span></div>
+        </div>
+
+        <!-- Photo 6 -->
+        <div class="gallery-item" onclick="openModal(5)">
+            <div class="series-badge">📷 2 photos</div>
+            <div class="gallery-item-content"><img src="assets/night_1.jpg" alt="Ambiance 6"></div>
+            <div class="gallery-item-overlay"><span>Voir les détails →</span></div>
+        </div>
+
+        <!-- Photo 7 - Série de 2 photos -->
+        <div class="gallery-item" onclick="openModal(6)">
+            <div class="series-badge">📷 2 photos</div>
+            <div class="gallery-item-content"><img src="assets/ambiance_7a.jpg" alt="Ambiance 7"></div>
+            <div class="gallery-item-overlay"><span>Diptyque - Série →</span></div>
+        </div>
+
+    </div>
+</section>
+
+<div class="modal-overlay" id="modal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div class="modal-image-container">
+            <div class="modal-image-wrapper">
+                <img src="" alt="Photo Ambiance" class="modal-image" id="modal-image">
+            </div>
+            <!-- Navigation carrousel -->
+            <div class="carousel-nav hidden" id="carousel-nav">
+                <button class="carousel-btn" onclick="prevImage()">←</button>
+                <div class="carousel-dots" id="carousel-dots"></div>
+                <span class="carousel-counter" id="carousel-counter">1/3</span>
+                <button class="carousel-btn" onclick="nextImage()">→</button>
+            </div>
+        </div>
+        <div class="modal-info">
+            <h2 class="modal-title" id="modal-title">Titre</h2>
+            <div class="modal-description"><p id="modal-description">Description...</p></div>
+            <div class="camera-settings">
+                <div class="setting-box"><div class="setting-box-content"><div class="setting-icon">📷</div><div class="setting-label">Ouverture</div><div class="setting-value" id="modal-aperture">f/2.8</div></div></div>
+                <div class="setting-box"><div class="setting-box-content"><div class="setting-icon">⚡</div><div class="setting-label">Vitesse</div><div class="setting-value" id="modal-shutter">1/1000</div></div></div>
+                <div class="setting-box"><div class="setting-box-content"><div class="setting-icon">🔆</div><div class="setting-label">ISO</div><div class="setting-value" id="modal-iso">3200</div></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer><p>© 2025 SARAH ETEVE PORTFOLIO</p></footer>
+
+<script>
+    const photosData = [
+        { 
+            // Série Liminal Place - 2 photos
+            images: ["assets/liminal_1.jpg", "assets/liminal_2.jpg"],
+            title: "Liminal Places", 
+            description: "Pour ces clichés inspirés du concept de liminal spaces que j'ai réalisé dans une laverie à Rouen un soir, j'ai recherché des atmosphères transitoires et déroutantes proches de l'esthétique des backrooms avec la colorimétrie jaune. ISO élevé et une ouverture modérée pour capter la lumière artificielle tout en conservant la netteté. Le développement dans Camera Raw a permis d'ajuster la colorimétrie et d'apporter un effet de Glow sur l'image pour donner ce côté onirique et hors du temps propre à ces espaces liminaux et appliquer une réduction de bruit ciblée pour préserver les détails. J'ai aussi utilisé la gomme IA de camera raw pour enlever les éléments superflux sur les murs comme les pancartes incendie...",
+            aperture: "f/3.5", 
+            shutter: "1/200", 
+            iso: "1600" 
+        },
+        { 
+            images: ["assets/ambiance_2.jpg"],
+            title: "The Last Of Us like", 
+            description: "Les lières sur de la briques rouge m'évoquais un contexte post-apocalyptique semblable à celui de The Last Of Us, j'ai donc volontairement repris la colorimétrie du jeu pour avoir l'impression que la photo provient du jeu", 
+            aperture: "f/6", 
+            shutter: "1/125", 
+            iso: "800" 
+        },
+        { 
+            images: ["assets/ambiance_3.jpg"],
+            title: "Lumière Dorée sur les champs de blé", 
+            description: "La golden hour offre une lumière chaude et enveloppante. J'ai voulu capturer ces rayons qui percent à travers la scène. L'ouverture est choisie pour optenir un bokeh et concentrer l'image sur un seul blé", 
+            aperture: "f/1.7", 
+            shutter: "1/500", 
+            iso: "400" 
+        },
+        { 
+            images: ["assets/ambiance_4.jpg"],
+            title: "Soir de ski", 
+            description: "La nuit qui tombe et la piscine dans la neige", 
+            aperture: "f/4.5", 
+            shutter: "1/120", 
+            iso: "1000" 
+        },
+        { 
+            images: ["assets/ambiance_5.jpg"],
+            title: "Coucher de soleil à Maurice", 
+            description: "Pecheur de l'Ile Maurice", 
+            aperture: "f/8", 
+            shutter: "1/500", 
+            iso: "200" 
+        },
+        { 
+             images: ["assets/night_1.jpg","assets/night_2.jpg"],
+            title: "Nuit éclairée", 
+            description: "La brumée de 4h du matin sur une station essence", 
+            aperture: "f/1.7", 
+            shutter: "1/120", 
+            iso: "600" 
+        },
+        { 
+            // Série de 2 photos
+            images: ["assets/ambiance_7a.jpg", "assets/ambiance_7b.jpg"],
+            title: "Neige et nuages bas", 
+            description: "Ces photos ont été prise à la tombée de la nuit après un épisode neigeux important dans le but de trensmettre une atmosphère étrange et hors du temps, l'étalonage en post-prod vers les tons bleus aide à renforcer l'impression d'étrange", 
+            aperture: "f/2.8", 
+            shutter: "1/200", 
+            iso: "640" 
+        },
+ 
+    ];
+
+    const modal = document.getElementById('modal');
+    const modalImage = document.getElementById('modal-image');
+    const carouselNav = document.getElementById('carousel-nav');
+    const carouselDots = document.getElementById('carousel-dots');
+    const carouselCounter = document.getElementById('carousel-counter');
+    
+    let currentPhotoIndex = 0;
+    let currentImageIndex = 0;
+    let currentImages = [];
+
+    function openModal(index) {
+        currentPhotoIndex = index;
+        currentImageIndex = 0;
+        const photo = photosData[index];
+        currentImages = photo.images;
+        
+        // Afficher la première image
+        modalImage.src = currentImages[0];
+        document.getElementById('modal-title').textContent = photo.title;
+        document.getElementById('modal-description').textContent = photo.description;
+        document.getElementById('modal-aperture').textContent = photo.aperture;
+        document.getElementById('modal-shutter').textContent = photo.shutter;
+        document.getElementById('modal-iso').textContent = photo.iso;
+        
+        // Gérer le carrousel
+        if (currentImages.length > 1) {
+            carouselNav.classList.remove('hidden');
+            updateCarousel();
+        } else {
+            carouselNav.classList.add('hidden');
+        }
+        
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function updateCarousel() {
+        // Mettre à jour l'image
+        modalImage.style.opacity = '0';
+        setTimeout(() => {
+            modalImage.src = currentImages[currentImageIndex];
+            modalImage.style.opacity = '1';
+        }, 150);
+        
+        // Mettre à jour le compteur
+        carouselCounter.textContent = `${currentImageIndex + 1}/${currentImages.length}`;
+        
+        // Mettre à jour les points
+        carouselDots.innerHTML = '';
+        currentImages.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'carousel-dot' + (i === currentImageIndex ? ' active' : '');
+            dot.onclick = () => goToImage(i);
+            carouselDots.appendChild(dot);
+        });
+    }
+
+    function nextImage() {
+        currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+        updateCarousel();
+    }
+
+    function prevImage() {
+        currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+        updateCarousel();
+    }
+
+    function goToImage(index) {
+        currentImageIndex = index;
+        updateCarousel();
+    }
+
+    function closeModal() { 
+        modal.classList.remove('active'); 
+        document.body.style.overflow = ''; 
+    }
+    
+    document.addEventListener('keydown', (e) => { 
+        if (e.key === 'Escape') closeModal();
+        if (modal.classList.contains('active') && currentImages.length > 1) {
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+        }
+    });
+    
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    // Swipe support pour mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    modal.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+
+    modal.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        if (currentImages.length <= 1) return;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+                nextImage(); // Swipe gauche = image suivante
+            } else {
+                prevImage(); // Swipe droite = image précédente
+            }
+        }
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; }, index * 100);
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.gallery-item').forEach(el => {
+        el.style.opacity = '0'; el.style.transform = 'translateY(30px)'; el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+</script>
+
+</body>
+</html>

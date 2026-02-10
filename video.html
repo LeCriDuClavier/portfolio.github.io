@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noimageindex">
+    <title>Vidéo - Portfolio ETEVE SARAH</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --primary-light: #7df9ff;
+            --primary-glow: #00a8cc;
+            --accent: #00ffff;
+            --bg: #0a0a1a;
+            --bg-dark: #050510;
+            --text: #e0f7ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            font-family: Inter, sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0px, rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 3px);
+            opacity: 0.3;
+        }
+       /* NAVBAR */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(12px);
+            background: rgba(10, 10, 30, 0.7);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            z-index: 20;
+        }
+
+        .navbar nav a {
+            margin: 0 15px;
+            font-size: 15px;
+            color: var(--text);
+            text-decoration: none;
+            transition: .3s;
+            position: relative;
+        }
+
+        .navbar nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+            transition: width 0.3s;
+        }
+
+        .navbar nav a:hover::after {
+            width: 100%;
+        }
+
+        .navbar nav a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: Orbitron, sans-serif;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: var(--bg);
+            box-shadow: 0 0 30px var(--primary), inset 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        .page-header { padding: 140px 80px 60px; position: relative; z-index: 1; }
+
+        .page-title {
+            font-size: 60px;
+            font-family: Orbitron;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5));
+            margin-bottom: 15px;
+        }
+
+        .page-subtitle { font-size: 18px; color: rgba(224, 247, 255, 0.7); max-width: 600px; }
+
+        .projects-section { padding: 40px 80px 100px; position: relative; z-index: 1; }
+
+        /* PROJECT CARD - Static border, animated on hover */
+        .project-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--bg-dark);
+            margin-bottom: 60px;
+            border: 2px solid rgba(0, 212, 255, 0.4);
+            transition: all 0.4s ease;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent 0deg, var(--primary-light) 30deg, var(--accent) 60deg, transparent 90deg, transparent 180deg, var(--primary-light) 210deg, var(--accent) 240deg, transparent 270deg);
+            z-index: 0;
+            opacity: 0;
+            animation: none;
+        }
+
+        @keyframes rotateBorder { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .project-card::after {
+            content: '';
+            position: absolute;
+            top: 2px; left: 2px; right: 2px; bottom: 2px;
+            background: var(--bg-dark);
+            border-radius: 18px;
+            z-index: 1;
+        }
+
+        .project-card:hover { border-color: transparent; }
+
+        .project-card:hover::before {
+            opacity: 1;
+            animation: rotateBorder 2s linear infinite;
+            background: conic-gradient(from 0deg, transparent 0deg, #ffffff 20deg, var(--primary-light) 40deg, var(--accent) 60deg, transparent 80deg, transparent 180deg, #ffffff 200deg, var(--primary-light) 220deg, var(--accent) 240deg, transparent 260deg);
+        }
+
+        .project-card-content {
+            position: relative;
+            z-index: 2;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        /* CLAP - Simple et statique avec ombre */
+        .clap-container {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .clap-wrapper {
+            width: 100%;
+            height: 100%;
+        }
+
+        .clap-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+        }
+
+        .project-details { display: flex; flex-direction: column; gap: 20px; }
+
+        .project-title {
+            font-family: Orbitron;
+            font-size: 32px;
+            color: var(--primary);
+            text-shadow: 0 0 20px var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .project-title::before {
+            content: '▶';
+            font-size: 24px;
+            color: var(--primary-light);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.9); }
+        }
+
+        .project-description { font-size: 16px; line-height: 1.8; color: rgba(224, 247, 255, 0.85); }
+        .project-description p { margin-bottom: 15px; }
+
+        .role-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+
+        .role-tag {
+            padding: 8px 16px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            font-family: Orbitron;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: var(--primary-light);
+            text-transform: uppercase;
+        }
+
+        .watch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-glow));
+            color: var(--bg);
+            font-family: Orbitron;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            border-radius: 40px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+            width: fit-content;
+            margin-top: 10px;
+        }
+
+        .watch-btn:hover {
+            box-shadow: 0 0 40px var(--primary), 0 0 60px rgba(0, 212, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .watch-btn .play-icon {
+            width: 0; height: 0;
+            border-left: 12px solid var(--bg);
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+        }
+
+        /* VIDEO EMBED - Static border */
+        .video-embed-container {
+            margin-top: 30px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--bg);
+            border: 2px solid rgba(0, 212, 255, 0.4);
+        }
+
+        .video-wrapper { position: relative; z-index: 2; padding: 3px; }
+
+        .video-wrapper iframe {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border: none;
+            border-radius: 14px;
+            display: block;
+        }
+
+        .description-box {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .description-box::before {
+            content: 'MA VISION & APPROCHE';
+            position: absolute;
+            top: -12px; left: 20px;
+            background: var(--bg-dark);
+            padding: 0 10px;
+            font-family: Orbitron;
+            font-size: 11px;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .description-box p { font-size: 15px; line-height: 1.7; color: rgba(224, 247, 255, 0.9); }
+
+        .project-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin: 20px 0 60px;
+            opacity: 0.3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            font-size: 14px;
+            color: var(--primary);
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+            background: rgba(0, 212, 255, 0.02);
+            position: relative;
+            z-index: 1;
+        }
+
+        @media(max-width: 1000px) {
+            .project-card-content { grid-template-columns: 1fr; text-align: center; }
+            .clap-container { margin: 0 auto; }
+            .project-title { justify-content: center; }
+            .role-tags { justify-content: center; }
+            .watch-btn { margin: 10px auto 0; }
+        }
+
+        @media(max-width: 768px) {
+            .page-header { padding: 120px 30px 40px; }
+            .page-title { font-size: 36px; }
+            .projects-section { padding: 20px 30px 60px; }
+            .project-card-content { padding: 25px; gap: 25px; }
+            .clap-container { width: 120px; height: 120px; }
+            .project-title { font-size: 24px; }
+            .navbar { padding: 15px 20px; }
+            .navbar nav { display: none; }
+            .project-description { font-size: 14px; }
+            .role-tags { gap: 8px; }
+            .role-tag { font-size: 10px; padding: 6px 12px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="scanlines"></div>
+
+<header class="navbar">
+    
+    <nav>
+        <a href="index.html#hero">Accueil</a>
+        <a href="index.html#photo">Photo</a>
+        <a href="index.html#graphisme">Graphisme</a>
+        <a href="video.html" class="active">Vidéo</a>
+        <a href="index.html#contact">Contact</a>
+    </nav>
+    <a href="index.html" class="back-btn">← Retour</a>
+</header>
+
+<div class="page-header">
+    <h1 class="page-title">AUDIOVISUEL</h1>
+    <p class="page-subtitle">Montage, réalisation et direction artistique. Découvrez mes projets vidéo où je mets en images des histoires captivantes et des ambiances uniques.</p>
+</div>
+
+<section class="projects-section">
+
+    <!-- PROJET 1 -->
+    <div class="project-card">
+        <div class="project-card-content">
+            <div class="clap-container">
+                <div class="clap-wrapper">
+                    <img src="assets/clap.webp" alt="Clap Cinéma" class="clap-img">
+                </div>
+            </div>
+            <div class="project-details">
+                <h2 class="project-title">Le Détective</h2>
+                <div class="project-description">
+                    <p>Découvrez "Le Détective", un trailer inspiré du genre films noir</p>
+                </div>
+                <div class="role-tags">
+                    <span class="role-tag">Scénario</span>
+                    <span class="role-tag">Prise de vue</span>
+                    
+                    <span class="role-tag">Montage</span>
+                </div>
+                <div class="description-box">
+                    <p>
+    Ce projet s’est concentré sur la réalisation d’une séquence d’introduction dans l’univers du film noir, autour d'une scène d'assassinat d’un détective ("Marlow"). La gestion des contraintes techniques, notamment l’adaptation aux variations de lumière naturelle et la disponibilité limitée des lieux, a nécessité une organisation rigoureuse et une grande réactivité pour ajuster le planning et optimiser chaque prise.
+  </p>
+  <p>
+    L’attention portée à la composition des plans, aux choix d’angles de caméra et à la direction des acteurs a contribué à créer une ambiance dramatique forte, caractéristique du genre noir & blanc. En postproduction, le montage a été élaboré pour soutenir un rythme narratif fluide, avec un travail approfondi sur l’étalonnage afin d’obtenir des contrastes marqués renforçant l’identité visuelle du film.
+  </p>
+  <p>
+    L’intégration d’éléments sonores (bruits de pas, pluie, ambiance urbaine) issus de banques libres de droits a enrichi l’atmosphère, amplifiant la tension et l’immersion du spectateur. Ce travail a demandé une réflexion poussée sur la cohérence entre image et son, essentielle à la narration filmique.
+  </p>
+  <p>
+    Cette expérience a mis en lumière la nécessité d’une coordination précise entre phases de tournage et de montage, ainsi qu’une sensibilité artistique indispensable pour transmettre une ambiance spécifique. Elle témoigne également d’une capacité à gérer les aléas en temps réel tout en maintenant un souci constant de qualité visuelle et sonore.
+  </p>
+                </div>
+                <a href="https://youtu.be/khNNSVGxg0A" target="_blank" rel="noopener" class="watch-btn">
+                    <span class="play-icon"></span>
+                    Regarder sur YouTube
+                </a>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="project-divider"></div>
+
+    <!-- PROJET 2 -->
+    <div class="project-card">
+        <div class="project-card-content">
+            <div class="clap-container">
+                <div class="clap-wrapper">
+                    <img src="assets/clap.webp" alt="Clap Cinéma" class="clap-img">
+                </div>
+            </div>
+            <div class="project-details">
+                <h2 class="project-title">Projet Trailer pour un Musée Fictif : Chronotextile</h2>
+                <div class="project-description">
+                    <p>Découvrez mon trailer promotionnel du musée Chronotextile, un musée immersif pour un retour dans le passé, ce trailer a été réalisé dans le cadre de la SAE 202</p>
+                </div>
+                <div class="role-tags">
+                    <span class="role-tag">Réalisation</span>
+                    <span class="role-tag">Montage et effets spéciaux</span>
+                </div>
+                <div class="description-box">
+                    <p>Projet : Création et Production d'un Trailer pour notre musée "Chronotextile"</p>
+
+<p>Réalisé en équipe de six, ce trailer promotionnel pour le musée immersif ChronoTextile m'a mis au défi de coordonner une production audiovisuelle complète.</p>
+
+<p><strong>Direction Artistique & Montage</strong><br>
+J'ai défini l'identité visuelle du trailer, en cohérence avec le thème textile, mêlant temporalité et ambiance immersive. Sous Premiere Pro, j'ai structuré la narration visuelle : découpe, rythme et synchronisation musique/images, pour susciter l’émotion attendue.</p>
+
+<p><strong>Effets Spéciaux & Innovation</strong><br>
+À travers After Effects, j'ai créé des effets holographiques et rotoscopie, imaginant une approche visuelle futuriste tout en respectant le cadre narratif du musée. Cette phase a été l’occasion de résoudre des défis techniques complexes, tout en maintenant la fluidité esthétique du film.</p>
+
+<p><strong>Coordination & Pilotage de projet</strong><br>
+Nous avons organisé le projet via Notion : découpage des tâches, suivi des objectifs, échanges collaboratifs. J'ai œuvré à la répartition équitable des rôles, géré les ajustements suite aux retours et assuré une communication constante pour que chaque livrable soit prêt dans les délais.</p>
+
+<p><strong>Bilan & acquis</strong><br>
+Le trailer final dépasse les exigences initiales : qualité visuelle, adéquation de l’univers sonore, cohésion artistique et fluidité narrative. J’ai renforcé mes compétences en leadership créatif, en communication audiovisuelle et en conduite de projet, tout en expérimentant une immersion complète dans la production multimédia.</p>
+
+                </div>
+                <a href="https://youtu.be/kdMhPhvez-M?feature=shared" target="_blank" rel="noopener" class="watch-btn">
+                    <span class="play-icon"></span>
+                    Regarder sur YouTube
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- PROJET 3 -->
+    <div class="project-card">
+        <div class="project-card-content">
+            <div class="clap-container">
+                <div class="clap-wrapper">
+                    <img src="assets/clap.webp" alt="Clap Cinéma" class="clap-img">
+                </div>
+            </div>
+            <div class="project-details">
+                <h2 class="project-title">Le creshendo</h2>
+                <div class="project-description">
+                    <p>Découvrez mon creshendo de 1min30 s'inspirant du monvement constructiviste</p>
+                </div>
+                <div class="role-tags">
+                    <span class="role-tag">Réalisation</span>
+                    <span class="role-tag">Montage et son</span>
+                </div>
+                <div class="description-box">
+                    <p>Projet De porduction vidéo et audio dans le but de réaliser un portrait de l'IUT d'Elbeuf avec contrainte d'utilisation de boucles d'une unique bande son à disposition.</p>
+
+
+
+                </div>
+                <a href="https://youtu.be/WvOoDUsPdKE?si=aymDOmk2kGqNwbXC" target="_blank" rel="noopener" class="watch-btn">
+                    <span class="play-icon"></span>
+                    Regarder sur YouTube
+                </a>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<footer><p>© 2025 SARAH ETEVE PORTFOLIO</p></footer>
+
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; }, index * 150);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.project-card').forEach(el => {
+        el.style.opacity = '0'; el.style.transform = 'translateY(40px)'; el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        observer.observe(el);
+    });
+</script>
+
+</body>
+</html>
+

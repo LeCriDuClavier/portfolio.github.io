@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noimageindex">
+    <title>MMA / Sport de Combat - Portfolio ETEVE SARAH</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --primary-light: #7df9ff;
+            --primary-glow: #00a8cc;
+            --accent: #00ffff;
+            --bg: #0a0a1a;
+            --bg-dark: #050510;
+            --text: #e0f7ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            font-family: Inter, sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            opacity: 0.3;
+        }
+
+       /* NAVBAR */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(12px);
+            background: rgba(10, 10, 30, 0.7);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            z-index: 20;
+        }
+
+        .navbar nav a {
+            margin: 0 15px;
+            font-size: 15px;
+            color: var(--text);
+            text-decoration: none;
+            transition: .3s;
+            position: relative;
+        }
+
+        .navbar nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+            transition: width 0.3s;
+        }
+
+        .navbar nav a:hover::after {
+            width: 100%;
+        }
+
+        .navbar nav a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: Orbitron, sans-serif;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: var(--bg);
+            box-shadow: 0 0 30px var(--primary), inset 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        .page-header {
+            padding: 140px 80px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            font-size: 60px;
+            font-family: Orbitron;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5));
+            margin-bottom: 15px;
+        }
+
+        .page-subtitle {
+            font-size: 18px;
+            color: rgba(224, 247, 255, 0.7);
+            max-width: 600px;
+        }
+
+        .gallery {
+            padding: 40px 80px 100px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        /* GALLERY ITEM - Static border, animated on hover */
+        .gallery-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--bg-dark);
+            cursor: pointer;
+            aspect-ratio: 4/3;
+            border: 2px solid rgba(0, 212, 255, 0.4);
+            transition: all 0.4s ease;
+        }
+.gallery-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                var(--primary-light) 30deg,
+                var(--accent) 60deg,
+                transparent 90deg,
+                transparent 180deg,
+                var(--primary-light) 210deg,
+                var(--accent) 240deg,
+                transparent 270deg
+            );
+            z-index: 0;
+            opacity: 0;
+            animation: none;
+            /* Optimisation GPU */
+            will-change: transform;
+            transform: translateZ(0);
+        }
+        @keyframes rotateBorder {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Optimisation : Réduire animations si préférence utilisateur */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            background: var(--bg-dark);
+            border-radius: 14px;
+            z-index: 1;
+        }
+
+        .gallery-item-content {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            border-radius: 14px;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: .4s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+            border-color: transparent;
+        }
+
+        .gallery-item:hover::before {
+            opacity: 1;
+            animation: rotateBorder 1.5s linear infinite;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                #ffffff 20deg,
+                var(--primary-light) 40deg,
+                var(--accent) 60deg,
+                transparent 80deg,
+                transparent 180deg,
+                #ffffff 200deg,
+                var(--primary-light) 220deg,
+                var(--accent) 240deg,
+                transparent 260deg
+            );
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(5, 5, 16, 0.9));
+            z-index: 3;
+            transition: 0.4s;
+        }
+
+        .gallery-item-overlay span {
+            color: var(--primary-light);
+            font-family: Orbitron;
+            font-size: 14px;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 5, 16, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            position: relative;
+            animation: modalFadeIn 0.4s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: var(--primary);
+            color: var(--bg);
+            box-shadow: 0 0 30px var(--primary);
+        }
+
+        /* Modal Image Container - STATIC border */
+        .modal-image-container {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--bg-dark);
+            border: 2px solid rgba(0, 212, 255, 0.4);
+        }
+
+        .modal-image-wrapper {
+            position: relative;
+            z-index: 2;
+            padding: 3px;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            border-radius: 14px;
+            display: block;
+        }
+
+        .modal-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .modal-title {
+            font-family: Orbitron;
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px var(--primary);
+        }
+
+        .modal-description {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .modal-description::before {
+            content: 'description & DÉMARCHE';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg);
+            padding: 0 10px;
+            font-family: Orbitron;
+            font-size: 11px;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .modal-description p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(224, 247, 255, 0.9);
+        }
+
+        /* Camera Settings - ANIMATED borders */
+        .camera-settings {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .setting-box {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-dark);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .setting-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                var(--primary-light) 60deg,
+                transparent 120deg,
+                transparent 180deg,
+                var(--primary-light) 240deg,
+                transparent 300deg
+            );
+            animation: rotateBorder 5s linear infinite;
+            z-index: 0;
+            /* Optimisation GPU */
+            will-change: transform;
+            transform: translateZ(0);
+        }
+        /* Pause les animations quand modal fermée */
+        .modal-overlay:not(.active) .setting-box::before {
+            animation-play-state: paused;
+        }
+
+        .setting-box::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            background: var(--bg-dark);
+            border-radius: 10px;
+            z-index: 1;
+        }
+
+        .setting-box-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .setting-label {
+            font-family: Orbitron;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .setting-value {
+            font-family: Orbitron;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-light);
+            text-shadow: 0 0 15px var(--primary);
+        }
+
+        .setting-icon {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            font-size: 14px;
+            color: var(--primary);
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+            background: rgba(0, 212, 255, 0.02);
+            position: relative;
+            z-index: 1;
+        }
+
+        @media(max-width: 1100px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modal {
+                grid-template-columns: 1fr;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+        }
+
+        @media(max-width: 768px) {
+            .page-header {
+                padding: 120px 30px 40px;
+            }
+
+            .page-title {
+                font-size: 36px;
+            }
+
+            .gallery {
+                padding: 20px 30px 60px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .navbar nav {
+                display: none;
+            }
+
+            .modal-overlay {
+                padding: 20px;
+            }
+
+            .modal-close {
+                top: -40px;
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+
+            .camera-settings {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="scanlines"></div>
+
+<header class="navbar">
+ 
+    <nav>
+        <a href="index.html#hero">Accueil</a>
+        <a href="index.html#photo">Photo</a>
+        <a href="index.html#graphisme">Graphisme</a>
+        <a href="video.html">Vidéo</a>
+        <a href="index.html#contact">Contact</a>
+    </nav>
+    <a href="index.html" class="back-btn">← Retour</a>
+</header>
+
+<div class="page-header">
+    <h1 class="page-title">MMA / SPORT DE COMBAT</h1>
+    <p class="page-subtitle">
+        <p>Le 29 novembre 2025 j'ai obtenu mon accréditation officelle de presse pour l'AEC16 de Rouen au Kindarena, j'accompagnais le club Rouennais MMA Agon en combat amateur.</p>
+        <p>Cette expérience m'a permis de pouvoir photographier l'intensité des combats, la puissance et l'émotion brute des combattants dans la cage.</p></p>
+</div>
+
+<section class="gallery">
+    <div class="gallery-grid">
+        <div class="gallery-item" onclick="openModal(0)">
+            <div class="gallery-item-content">
+                <img src="assets/MMA_1.jpg" alt="Combat MMA 1" loading="lazy" decoding="async">
+            </div>
+            <div class="gallery-item-overlay">
+                <span>Voir les détails →</span>
+            </div>
+        </div>
+
+        <div class="gallery-item" onclick="openModal(1)">
+            <div class="gallery-item-content">
+                <img src="assets/MMA_2.jpg" alt="Combat MMA 2" loading="lazy" decoding="async">
+            </div>
+            <div class="gallery-item-overlay">
+                <span>Voir les détails →</span>
+            </div>
+        </div>
+
+        <div class="gallery-item" onclick="openModal(2)">
+            <div class="gallery-item-content">
+                <img src="assets/MMA_3.jpg" alt="Combat MMA 3" loading="lazy" decoding="async">
+            </div>
+            <div class="gallery-item-overlay">
+                <span>Voir les détails →</span>
+            </div>
+        </div>
+
+        <div class="gallery-item" onclick="openModal(3)">
+            <div class="gallery-item-content">
+                <img src="assets/MMA_4.jpg" alt="Combat MMA 4" loading="lazy" decoding="async">
+            </div>
+            <div class="gallery-item-overlay">
+                <span>Voir les détails →</span>
+            </div>
+        </div>
+
+        <div class="gallery-item" onclick="openModal(4)">
+            <div class="gallery-item-content">
+                <img src="assets/MMA_5.jpg" alt="Combat MMA 5" loading="lazy" decoding="async">
+            </div>
+            <div class="gallery-item-overlay">
+                <span>Voir les détails →</span>
+            </div>
+        </div>
+
+
+    </div>
+</section>
+
+<div class="modal-overlay" id="modal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        
+        <div class="modal-image-container">
+            <div class="modal-image-wrapper">
+                <img src="" alt="Photo MMA" class="modal-image" id="modal-image">
+            </div>
+        </div>
+        
+        <div class="modal-info">
+            <h2 class="modal-title" id="modal-title">Titre de la photo</h2>
+            
+            <div class="modal-description">
+                <p id="modal-description">Description de l'description et de la démarche artistique...</p>
+            </div>
+            
+            <div class="camera-settings">
+                <div class="setting-box">
+                    <div class="setting-box-content">
+                        <div class="setting-icon">📷</div>
+                        <div class="setting-label">Ouverture</div>
+                        <div class="setting-value" id="modal-aperture">f/2.8</div>
+                    </div>
+                </div>
+                
+                <div class="setting-box">
+                    <div class="setting-box-content">
+                        <div class="setting-icon">⚡</div>
+                        <div class="setting-label">Vitesse</div>
+                        <div class="setting-value" id="modal-shutter">1/1000</div>
+                    </div>
+                </div>
+                
+                <div class="setting-box">
+                    <div class="setting-box-content">
+                        <div class="setting-icon">🔆</div>
+                        <div class="setting-label">ISO</div>
+                        <div class="setting-value" id="modal-iso">3200</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2025 SARAH ETEVE PORTFOLIO</p>
+</footer>
+
+<script>
+    const photosData = [
+        {
+            image: "assets/MMA_1.jpg",
+            title: "La célébration",
+            description: "L'explosion de joie après une victoire est un moment d'émotion pure. J'ai voulu capturer cette libération, ce mélange de soulagement et d'euphorie qui envahit le combattant après des mois de préparation.",
+            aperture: "f/2.8",
+            shutter: "1/1000",
+            iso: "3200"
+        },
+        {
+            image: "assets/MMA_2.jpg",
+            title: "Alvi Dasuyev en combat pro Vs Kevin Ruart",
+            description: "Le but était de figer l'impact d'un coup, ce moment où l'énergie se transfère d'un corps à l'autre. Une vitesse d'obturation élevée permet de capturer chaque goutte de sueur, chaque déformation du visage sous l'impact.",
+            aperture: "f/2.0",
+            shutter: "1/800",
+            iso: "5000"
+        },
+        {
+            image: "assets/MMA_3.jpg",
+            title: "Alvi Dasuyev Vs Kevin Ruart",
+            description: "Un portrait serré du combattant avant son entrée dans la cage. Je cherchais à capturer ce regard intense, cette concentration absolue qui précède le combat. L'arrière-plan flou isole le sujet et renforce l'intimité du moment.",
+            aperture: "f/1.8",
+            shutter: "1/500",
+            iso: "2500"
+        },
+        {
+            image: "assets/MMA_4.jpg",
+            title: "Anzor en combat pro à L'AEC",
+            description: "Anzor regardant l'arbitre en enchainant les coups sur son adversaires attendant que l'arbitre annonce le TKO",
+            aperture: "f/2.8",
+            shutter: "1/800",
+            iso: "5000"
+        },
+        {
+            image: "assets/MMA_5.jpg",
+            title: "Impact poing",
+            description: "Le but était de figer l'impact d'un coup de poing au visage.",
+            aperture: "f/2.8",
+            shutter: "1/1000",
+            iso: "3200"
+        }
+    ];
+
+    const modal = document.getElementById('modal');
+    const modalImage = document.getElementById('modal-image');
+    const modalTitle = document.getElementById('modal-title');
+    const modaldescription = document.getElementById('modal-description');
+    const modalAperture = document.getElementById('modal-aperture');
+    const modalShutter = document.getElementById('modal-shutter');
+    const modalIso = document.getElementById('modal-iso');
+
+    function openModal(index) {
+        const photo = photosData[index];
+        modalImage.src = photo.image;
+        modalTitle.textContent = photo.title;
+        modaldescription.textContent = photo.description;
+        modalAperture.textContent = photo.aperture;
+        modalShutter.textContent = photo.shutter;
+        modalIso.textContent = photo.iso;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 100);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.gallery-item').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+</script>
+
+</body>
+</html>

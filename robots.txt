@@ -1,0 +1,22 @@
+# Bloquer l'indexation des images par les moteurs de recherche
+User-agent: Googlebot-Image
+Disallow: /assets/
+
+User-agent: Bingbot
+Disallow: /assets/
+
+User-agent: Slurp
+Disallow: /assets/
+
+User-agent: msnbot
+Disallow: /assets/
+
+User-agent: *
+Disallow: /assets/*.jpg
+Disallow: /assets/*.jpeg
+Disallow: /assets/*.png
+Disallow: /assets/*.webp
+Disallow: /assets/*.gif
+
+# Autoriser l'accès aux autres pages
+Allow: /
